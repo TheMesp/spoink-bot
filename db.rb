@@ -41,18 +41,6 @@ def setup
 	SQL
 
 	db.execute <<-SQL
-		CREATE TABLE IF NOT EXISTS matches(
-			id int PRIMARY KEY,
-			replay_link varchar(60),
-			season_id int,
-			winner_id int NOT NULL,
-			loser_id int NOT NULL,
-			FOREIGN KEY (season_id) REFERENCES seasons(id) ON DELETE CASCADE
-		)
-	SQL
-
-	# print db.foreign_key_list("conferences")
-	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS teams(
 			id int PRIMARY KEY,
 			player_id varchar(30) NOT NULL,
@@ -65,6 +53,21 @@ def setup
 			FOREIGN KEY (season_id) REFERENCES seasons(id) ON DELETE CASCADE
 		);
 	SQL
+
+	db.execute <<-SQL
+		CREATE TABLE IF NOT EXISTS matches(
+			id int PRIMARY KEY,
+			replay_link varchar(60),
+			season_id int,
+			winner_id int NOT NULL,
+			loser_id int NOT NULL,
+			FOREIGN KEY (season_id) REFERENCES seasons(id) ON DELETE CASCADE,
+			FOREIGN KEY (winner_id) REFERENCES teams(id) ON DELETE CASCADE,
+			FOREIGN KEY (loser_id) REFERENCES teams(id) ON DELETE CASCADE
+		)
+	SQL
+
+	# print db.foreign_key_list("conferences")
 
 	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS pokemon(
