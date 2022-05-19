@@ -17,7 +17,8 @@ def setup
 
 	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS players(
-			id varchar(30) NOT NULL PRIMARY KEY,
+			id int NOT NULL PRIMARY KEY,
+			discord_id varchar(30),
 			discord_name varchar(30),
 			timezone varchar(10),
 			showdown_name varchar(30)
@@ -43,7 +44,7 @@ def setup
 	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS teams(
 			id int PRIMARY KEY,
-			player_id varchar(30) NOT NULL,
+			player_id int NOT NULL,
 			season_id int NOT NULL,
 			team_name varchar(60) NOT NULL,
 			wins int,
@@ -58,6 +59,7 @@ def setup
 		CREATE TABLE IF NOT EXISTS matches(
 			id int PRIMARY KEY,
 			replay_link varchar(60),
+			week int,
 			season_id int,
 			winner_id int NOT NULL,
 			loser_id int NOT NULL,
@@ -71,24 +73,22 @@ def setup
 
 	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS pokemon(
-			player_id varchar(30) NOT NULL,
 			team_id int NOT NULL,
 			pokedex_id int,
 			kills int,
-			CONSTRAINT pk PRIMARY KEY (team_id, poke_id),
-			FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
+			CONSTRAINT pk PRIMARY KEY (team_id, pokedex_id),
 			FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
 		);
 	SQL
 	print "Tables created.\n"
 	print "Running Pokemon Draft League Simulator 2022...\n"
-	db.execute("INSERT INTO players VALUES (?)", ["Mesp"])
-	db.execute("INSERT INTO players VALUES (?)", ["Ghostly"])
-	db.execute("INSERT INTO players VALUES (?)", ["Crobatoh"])
-	db.execute("INSERT INTO players VALUES (?)", ["Risa"])
+	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name) VALUES (?, ?, ?, ?, ?)", [1, 11, "Mesp", "UTC-6", "Mesp"])
+	# db.execute("INSERT INTO players VALUES (?)", ["Ghostly"])
+	# db.execute("INSERT INTO players VALUES (?)", ["Crobatoh"])
+	# db.execute("INSERT INTO players VALUES (?)", ["Risa"])
 
-	db.execute("INSERT INTO seasons VALUES (?,?,?)", [1,"date(2020-05-31)","date(2020-07-15)"])
-	db.execute("INSERT INTO seasons VALUES (?,?,?)", [2,"date(2021-05-31)","date(2021-07-15)"])
+	# db.execute("INSERT INTO seasons VALUES (?,?,?)", [1,"date(2020-05-31)","date(2020-07-15)"])
+	# db.execute("INSERT INTO seasons VALUES (?,?,?)", [2,"date(2021-05-31)","date(2021-07-15)"])
 
 	# db.execute_batch <<-SQL
 	# 	INSERT INTO conferences VALUES (1,'Ruby');
