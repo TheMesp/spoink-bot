@@ -1,7 +1,8 @@
 # David "Mesp" Loewen
 # DB accessor file
 
-require "sqlite3"
+require 'sqlite3'
+require 'csv'
 
 def opendb
 	return SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
@@ -83,49 +84,26 @@ def setup
 	SQL
 	print "Tables created.\n"
 	print "Running Pokemon Draft League Simulator 2022...\n"
-	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name, profile_pic_url) VALUES (?, ?, ?, ?, ?, ?)", [1, 11, "Mesp", "UTC-6", "Mesp", "https://archives.bulbagarden.net/media/upload/2/25/MDP_E_481.png"])
-	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name, profile_pic_url) VALUES (?, ?, ?, ?, ?, ?)", [2, 22, "Risa", "UTC-7", "D1770S", "https://archives.bulbagarden.net/media/upload/d/db/MDP_E_285.png"])
-	# db.execute("INSERT INTO players VALUES (?)", ["Ghostly"])
-	# db.execute("INSERT INTO players VALUES (?)", ["Crobatoh"])
-	# db.execute("INSERT INTO players VALUES (?)", ["Risa"])
+	Dir.glob("/root/discordbots/spoink-project/spoink-backend/db/dummy_data/*.csv").each do |filename|
+		# fetch the table name from the csv name
+		tablename = filename.match(/(\w+)\.csv/).to_a[1]
+		headers = []
+		CSV.foreach(filename) do |row|
+			if headers.empty?
+				headers = row
+			else
+				db.execute("INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{Array.new(headers.size, '?').join(', ')})", row)
+			end
+		end
+	end
 
-	# db.execute("INSERT INTO seasons VALUES (?,?,?)", [1,"date(2020-05-31)","date(2020-07-15)"])
-	# db.execute("INSERT INTO seasons VALUES (?,?,?)", [2,"date(2021-05-31)","date(2021-07-15)"])
-
-	# db.execute_batch <<-SQL
-	# 	INSERT INTO conferences VALUES (1,'Ruby');
-	# SQL
-	# db.execute_batch <<-SQL
-	# 	INSERT INTO conferences VALUES (2,'Ruby');
-	# SQL
-
-	# db.execute("SELECT * FROM conferences") do |row|
+	# db.execute("SELECT * FROM players") do |row|
 	# 	print("#{row}\n")
 	# end
 	# db.execute("SELECT * FROM seasons") do |row|
 	# 	print("#{row}\n")
 	# end
 
-	# db.execute("DELETE FROM seasons WHERE id=1")
-	# print "\n"
-	# db.execute("SELECT * FROM conferences") do |row|
-	# 	print("#{row}\n")
-	# end
-	db.execute("SELECT * FROM players") do |row|
-		print("#{row}\n")
-	end
-	# db.execute("INSERT INTO player_records VALUES (?,?,?,?,?,?,?)",
-	# 	["Mesp","???","Mesped Up","Diamond",2,0,0]
-	# )
-	# db.execute("INSERT INTO player_records VALUES (?,?,?,?,?,?,?)",
-	# 	["Ghostly",1,"Rescue Team Team Team","Diamond",1,1,0]
-	# )
-	# db.execute("INSERT INTO player_records VALUES (?,?,?,?,?,?,?)",
-	# 	["Crobatoh",1,"Brigade Brigade","Pearl",0,1,0]
-	# )
-	# db.execute("INSERT INTO player_records VALUES (?,?,?,?,?,?,?)",
-	# 	["Rando",1,"Bad Team","Pearl",0,2,0]
-	# )
 	print "Done\n"
 end
 setup
