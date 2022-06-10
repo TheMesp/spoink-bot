@@ -1,39 +1,39 @@
 ginger,jacob,1,szn 1 week 1
-orange,emperor,1
-ddiamond,kozak,0
-ghostly,speedy,0
+orange,emperor,1,
+ddiamond,kozak,0,
+ghostly,speedy,0,
 ginger,emperor,1,szn 1 week 2
-orange,kozak,0
-speedy,jacob,1
-ghostly,ddiamond,1
+orange,kozak,0,
+speedy,jacob,1,
+ghostly,ddiamond,1,
 speedy,ginger,1,szn 1 week 3
-orange,ghostly,0
-emperor,kozak,0
-jacob,ddiamond,0
+orange,ghostly,0,
+emperor,kozak,0,
+jacob,ddiamond,0,
 kozak,ghostly,0,szn 1 week 4
-emperor,speedy,0
-ginger,ddiamond,1
-jacob,orange,1
+emperor,speedy,0,
+ginger,ddiamond,1,
+jacob,orange,1,
 ghostly,emperor,0,szn 1 week 5
-ddiamond,speedy,0
-jacob,kozak,1
-ginger,orange,0
+ddiamond,speedy,0,
+jacob,kozak,1,
+ginger,orange,0,
 jacob,ghostly,0, szn 1 week 6
-speedy,orange,1
-ddiamond,emperor,1
-kozak,ginger,0
+speedy,orange,1,
+ddiamond,emperor,1,
+kozak,ginger,0,
 jacob,emperor,1,szn 1 week 7
-ddiamond,orange,0
-ginger,ghostly,1
-speedy,kozak,1
+ddiamond,orange,0,
+ginger,ghostly,1,
+speedy,kozak,1,
 emperor,speedy,0,szn 1 qf
-ddiamond,ginger,0
-jacob,ghostly,1
-kozak,orange,0
+ddiamond,ginger,0,
+jacob,ghostly,1,
+kozak,orange,0,
 emperor,ghostly,0,szn 1 sf
-ddiamond,kozak,1
+ddiamond,kozak,1,
 emperor,kozak,1,szn 1 finals
 ddiamond,ghostly,1,szn 1 bronze
 jacob,speedy,0,szn 1 eliminated
-orange,ginger,0
+orange,ginger,0,
 jacob,orange,0,szn 1 5th place

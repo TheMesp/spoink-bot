@@ -21,7 +21,8 @@ def setup
 			discord_id varchar(30),
 			discord_name varchar(30),
 			timezone varchar(10),
-			showdown_name varchar(30)
+			showdown_name varchar(30),
+			profile_pic_url varchar(60)
 		);
 	SQL
 	db.execute <<-SQL
@@ -82,7 +83,8 @@ def setup
 	SQL
 	print "Tables created.\n"
 	print "Running Pokemon Draft League Simulator 2022...\n"
-	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name) VALUES (?, ?, ?, ?, ?)", [1, 11, "Mesp", "UTC-6", "Mesp"])
+	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name, profile_pic_url) VALUES (?, ?, ?, ?, ?, ?)", [1, 11, "Mesp", "UTC-6", "Mesp", "https://archives.bulbagarden.net/media/upload/2/25/MDP_E_481.png"])
+	db.execute("INSERT INTO players(id, discord_id, discord_name, timezone, showdown_name, profile_pic_url) VALUES (?, ?, ?, ?, ?, ?)", [2, 22, "Risa", "UTC-7", "D1770S", "https://archives.bulbagarden.net/media/upload/d/db/MDP_E_285.png"])
 	# db.execute("INSERT INTO players VALUES (?)", ["Ghostly"])
 	# db.execute("INSERT INTO players VALUES (?)", ["Crobatoh"])
 	# db.execute("INSERT INTO players VALUES (?)", ["Risa"])
