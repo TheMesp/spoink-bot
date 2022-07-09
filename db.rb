@@ -23,7 +23,7 @@ def setup
 			discord_name varchar(30),
 			timezone varchar(10),
 			showdown_name varchar(30),
-			profile_pic_url varchar(60)
+			profile_pic_url varchar(200)
 		);
 	SQL
 	db.execute <<-SQL
@@ -84,18 +84,23 @@ def setup
 	SQL
 	print "Tables created.\n"
 	print "Running Pokemon Draft League Simulator 2022...\n"
+	# Turn off foreign keys for dummy data since we don't control the order that tables are fed in
+	db.execute "PRAGMA foreign_keys = OFF;"
 	Dir.glob("/root/discordbots/spoink-project/spoink-backend/db/dummy_data/*.csv").each do |filename|
 		# fetch the table name from the csv name
 		tablename = filename.match(/(\w+)\.csv/).to_a[1]
 		headers = []
+			
 		CSV.foreach(filename) do |row|
 			if headers.empty?
 				headers = row
 			else
+				# print "INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{row.join(', ')})\n"
 				db.execute("INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{Array.new(headers.size, '?').join(', ')})", row)
 			end
 		end
 	end
+	db.execute "PRAGMA foreign_keys = ON;"
 
 	# db.execute("SELECT * FROM players") do |row|
 	# 	print("#{row}\n")

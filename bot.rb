@@ -85,6 +85,9 @@ bot.application_command(:pokemon) do |event|
 			description: description,
 			image: Discordrb::Webhooks::EmbedImage.new(url:"#{res['sprites']['front_default']}")
 		)
+		res['stats'].each do |stat|
+			response_embed.add_field(name: stat['stat']['name'], value: stat['base_stat'])
+		end
 		event.respond(embeds:[response_embed.to_hash])
 	end
 end
