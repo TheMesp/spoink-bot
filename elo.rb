@@ -3,6 +3,7 @@ require 'csv'
 def reset_elo
     @elo_dict = Hash.new(1000)
     @diff_dict = Hash.new(0)
+    @maxelo_dict = Hash.new(0)
 end
 
 def calc_match_probability(winner, loser)
@@ -13,7 +14,8 @@ def process_match(player1, player2, constant, outcome)
 
     prob1 = calc_match_probability(@elo_dict[player1], @elo_dict[player2])
     prob2 = calc_match_probability(@elo_dict[player2], @elo_dict[player1])
-
+    @maxelo_dict[player1] = @elo_dict[player1] if @elo_dict[player1] > @maxelo_dict[player1]
+    @maxelo_dict[player2] = @elo_dict[player2] if @elo_dict[player2] > @maxelo_dict[player2]
     if(outcome == 0)
         # Player 1 wins
         @elo_dict[player1] = @elo_dict[player1] + constant * (1 - prob1)
@@ -27,6 +29,8 @@ def process_match(player1, player2, constant, outcome)
         @diff_dict[player1] = constant * (0 - prob1)
         @diff_dict[player2] = constant * (1 - prob2)
     end
+    @maxelo_dict[player1] = @elo_dict[player1] if @elo_dict[player1] > @maxelo_dict[player1]
+    @maxelo_dict[player2] = @elo_dict[player2] if @elo_dict[player2] > @maxelo_dict[player2]
 
 end
 
