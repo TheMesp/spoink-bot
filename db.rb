@@ -23,7 +23,7 @@ def setup
 			discord_name varchar(30),
 			timezone varchar(10),
 			showdown_name varchar(30),
-			profile_pic_url varchar(200)
+			favourite_pokemon int
 		);
 	SQL
 	db.execute <<-SQL
