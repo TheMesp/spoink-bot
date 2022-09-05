@@ -4,6 +4,8 @@ def reset_elo
     @elo_dict = Hash.new(1000)
     @diff_dict = Hash.new(0)
     @maxelo_dict = Hash.new(0)
+    @matchage_dict = Hash.new(0)
+    @currmatch = 0
 end
 
 def calc_match_probability(winner, loser)
@@ -11,7 +13,9 @@ def calc_match_probability(winner, loser)
 end
 
 def process_match(player1, player2, constant, outcome)
-
+    @currmatch += 1;
+    @matchage_dict[player1] = @currmatch;
+    @matchage_dict[player2] = @currmatch;
     prob1 = calc_match_probability(@elo_dict[player1], @elo_dict[player2])
     prob2 = calc_match_probability(@elo_dict[player2], @elo_dict[player1])
     @maxelo_dict[player1] = @elo_dict[player1] if @elo_dict[player1] > @maxelo_dict[player1]
@@ -44,9 +48,15 @@ def calc_elo_dict(player = nil)
         print("#{@elo_dict[player]}\n")
     else
         sorted = @elo_dict.sort_by {|k, v| -v}
+        print("Active players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-"))
+            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + 100 >= @currmatch
+        end
+        print("\nInactive players:\n\n")
+        sorted.each do |key,value|
+            symbol = @diff_dict[key] < 0 ? '-' : '+';
+            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + 100 < @currmatch
         end
         
     end
