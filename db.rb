@@ -3,6 +3,7 @@
 
 require 'sqlite3'
 require 'csv'
+require 'httparty'
 
 def opendb
 	return SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
@@ -29,6 +30,7 @@ def setup
 	db.execute <<-SQL
 		CREATE TABLE IF NOT EXISTS seasons(
 			id int NOT NULL PRIMARY KEY,
+			season_name varchar(60),
 			start_time date,
 			end_time date
 		);
@@ -90,15 +92,25 @@ def setup
 		# fetch the table name from the csv name
 		tablename = filename.match(/(\w+)\.csv/).to_a[1]
 		headers = []
-			
+		req_json = {};
+		req_json[tablename] = [];
 		CSV.foreach(filename) do |row|
 			if headers.empty?
 				headers = row
 			else
+				row_hash = {};			
+				headers.each_with_index do |header, i|
+					row_hash[header] = row[i]
+				end
+				req_json[tablename] << row_hash;
+				HTTParty.post("http://localhost:3000/#{tablename}/", type: 'application/json', body: row_hash)
 				# print "INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{row.join(', ')})\n"
 				db.execute("INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{Array.new(headers.size, '?').join(', ')})", row)
 			end
 		end
+		# TODO figure out json decompression
+		# print req_json.to_json;
+		
 	end
 	db.execute "PRAGMA foreign_keys = ON;"
 
