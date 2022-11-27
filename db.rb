@@ -6,7 +6,9 @@ require 'csv'
 require 'httparty'
 
 def opendb
-	return SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
+	db = SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
+	`chmod 666 /root/discordbots/spoink-project/spoink-backend/db/draft_league.db`
+	return db
 end
 
 # DELETES THE DATABASE, then recreates it
@@ -15,6 +17,7 @@ def setup
 	File.delete("/root/discordbots/spoink-project/spoink-backend/db/draft_league.db") if File.exist?("/root/discordbots/spoink-project/spoink-backend/db/draft_league.db")
 	print "Creating tables..."
 	db = opendb
+	
 	db.execute "PRAGMA foreign_keys = ON;"	
 
 	db.execute <<-SQL
@@ -105,7 +108,7 @@ def setup
 				req_json[tablename] << row_hash;
 				HTTParty.post("http://localhost:3000/#{tablename}/", type: 'application/json', body: row_hash)
 				# print "INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{row.join(', ')})\n"
-				db.execute("INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{Array.new(headers.size, '?').join(', ')})", row)
+				db.execute("INSERT INTO #{tablename}(#{headers.join(', ')}) VALUES (#{Array.new(headers.size, '?').join(', ')})", row) unless tablename == 'players'
 			end
 		end
 		# TODO figure out json decompression

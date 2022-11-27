@@ -60,7 +60,7 @@ POKEDEX_BANLIST = %w(
 def trace_evo_tree(chain, base_form, passed_base_form)
   # stupid edge cases
   return ['urshifu-rapid-strike'] if base_form == 'kubfu'
-  return ['you decide'] if chain['species']['name'] == 'eevee'
+  return ['you decide'] if base_form == 'eevee'
   return ['lol, lmao'] if chain['species']['name'] == 'cosmog'
   output = []
   if passed_base_form && !POKEDEX_BANLIST.include?(chain['species']['name'])
