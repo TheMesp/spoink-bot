@@ -1,4 +1,5 @@
 MAX_POKEDEX_NUM = 898
+MAX_ROLL_NUM = 1008
 # POKEDEX_BANLIST = [
 #   # 493,898,815,491,555,386,483,882,887,890,649,487,383,250,382,646,645,249,792,
 #   # 802,801,150,804,800,484,795,384,643,492,791,897,641,892,716,717,888,889,644,718
@@ -23,8 +24,10 @@ POKEDEX_BANLIST = %w(
   giratina-altered
   giratina-origin
   groudon
+  groudon-primal
   ho-oh
   kyogre
+  kyogre-primal
   kyurem-black
   kyurem-white
   landorus-incarnate
@@ -55,6 +58,69 @@ POKEDEX_BANLIST = %w(
   zygarde
 )
 
+GEN_9_POKEDEX = %w(
+  meowscarada
+  skeledirge
+  quaquaval
+  oinkologne
+  spidops
+  lokix
+  pawmot
+  maushold
+  dachsbun
+  arboliva
+  squawkabilly
+  garganacl
+  armarouge
+  ceruledge
+  bellibolt
+  kilowattrel
+  mabosstiff
+  grafaiai
+  brambleghast
+  toedscruel
+  klawf
+  scovillain
+  rabsca
+  espathra
+  tinkaton
+  wugtrio
+  bombirdier
+  revavroom
+  cyclizar
+  orthworm
+  glimmora
+  flamigo
+  cetitan
+  veluza
+  dondozo
+  tatsugiri
+  annihilape
+  clodsire
+  farigiraf
+  dudunsparce
+  kingambit
+  great-tusk
+  scream-tail
+  brute-bonnet
+  flutter-mane
+  slither-wing
+  sandy-shocks
+  iron-treads
+  iron-bundle
+  iron-hands
+  iron-jugulis
+  iron-moth
+  iron-thorns
+  baxcalibur
+  gholdengo
+  wo-chien
+  chien-pao
+  ting-lu
+  chi-yu
+  roaring-moon
+  iron-valiant
+)
 
 # recursively returns valid evos
 def trace_evo_tree(chain, base_form, passed_base_form)
@@ -94,26 +160,33 @@ def setup_rng_commands(bot)
       for i in 1..num do
         poke_name = ''
         loop do
-          next_id = rand(1..MAX_POKEDEX_NUM)
-          response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
-          response = JSON.parse(response)
-          temp_name = ""
-          loop do
-            temp_name = response['varieties'].sample['pokemon']['name']
-            unless temp_name.include?('mega') || temp_name.include?('gmax') || temp_name.include?('totem')
+          next_id = rand(1..MAX_ROLL_NUM)
+          if next_id <= MAX_POKEDEX_NUM
+            response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
+            response = JSON.parse(response)
+            temp_name = ""
+            loop do
+              temp_name = response['varieties'].sample['pokemon']['name']
+              unless temp_name.include?('mega') || temp_name.include?('gmax') || temp_name.include?('totem')
+                break
+              end
+            end     
+            if POKEDEX_BANLIST.include? temp_name
+              poke_name << "~~#{temp_name.capitalize}~~ "
+            else
+              poke_name << temp_name.capitalize
+              if response['evolution_chain']
+                evos = get_evos(response['evolution_chain']['url'].split('evolution-chain/')[1].to_i, temp_name)
+                poke_name << " (#{evos.join(", ")})" unless evos.empty?
+              end
+              output_names << poke_name
+              output_ids << next_id
               break
             end
-          end     
-          if POKEDEX_BANLIST.include? temp_name
-            poke_name << "~~#{temp_name.capitalize}~~ "
           else
-            poke_name << temp_name.capitalize
-            if response['evolution_chain']
-              evos = get_evos(response['evolution_chain']['url'].split('evolution-chain/')[1].to_i, temp_name)
-              poke_name << " (#{evos.join(", ")})" unless evos.empty?
-            end
-            output_names << poke_name
-            output_ids << next_id
+            # Hardcoding gen 9s, woo
+            output_names << GEN_9_POKEDEX.sample.capitalize
+            output_ids << "???"
             break
           end
         end
