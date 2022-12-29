@@ -148,11 +148,11 @@ end
 def setup_rng_commands(bot)
   
   bot.application_command(:roll) do |event|
-    if !event.options['num'] || event.options['num'].to_i < 1 || event.options['num'] > 6
+    if event.options['num'] && (event.options['num'].to_i < 1 || event.options['num'] > 6)
       event.respond(content:"Invalid number. Only 1-6, please.", ephemeral: true)
     else
       event.respond(content:"Generating, please wait...")
-      num = event.options['num'].to_i
+      num = !event.options['num'] ? 6 : event.options['num'].to_i
       output_names = []
       output_ids = []
       for i in 1..num do
