@@ -35,6 +35,7 @@ POKEDEX_BANLIST = %w(
   lunala
   marshadow
   magearna
+  melmetal
   mewtwo
   naganadel
   necrozma-dawn-wings
@@ -42,6 +43,7 @@ POKEDEX_BANLIST = %w(
   palkia
   pheromosa
   rayquaza
+  regieleki
   reshiram
   shaymin-sky
   solgaleo
@@ -113,11 +115,18 @@ GEN_9_POKEDEX = %w(
   baxcalibur
   gholdengo
   wo-chien
-  chien-pao
   ting-lu
   chi-yu
   roaring-moon
   iron-valiant
+  wyrdeer
+  kleavor
+  ursaluna
+  basculegion
+  sneasler
+  overqwil
+  enamorus-therian
+  enamorus-incarnate
 )
 
 # recursively returns valid evos

@@ -67,8 +67,8 @@ def setup_pokemon_commands(bot)
       description = "Type: **#{typestring}**"
       description << "\nPossible Abilities: #{abilities.join(', ')}"
       description << "\nType matchups (**Bold** indicates a 4x weakness/resistance):\n"
-      description << "*Resists:* #{strengths.join(", ")}\n" if strengths.length() > 0
       description << "*Weak to:* #{weaknesses.join(", ")}\n" if weaknesses.length() > 0
+      description << "*Resists:* #{strengths.join(", ")}\n" if strengths.length() > 0     
       description << "*Immune to:* #{immunities.join(", ")}\n" if immunities.length() > 0
   
       response_embed = Discordrb::Webhooks::Embed.new(
