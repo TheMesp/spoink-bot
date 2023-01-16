@@ -114,7 +114,6 @@ GEN_9_POKEDEX = %w(
   gholdengo
   wo-chien
   ting-lu
-  chi-yu
   roaring-moon
   iron-valiant
   wyrdeer
