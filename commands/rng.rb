@@ -1,10 +1,6 @@
 MAX_POKEDEX_NUM = 898
 MAX_ROLL_NUM = 1008
-# POKEDEX_BANLIST = [
-#   # 493,898,815,491,555,386,483,882,887,890,649,487,383,250,382,646,645,249,792,
-#   # 802,801,150,804,800,484,795,384,643,492,791,897,641,892,716,717,888,889,644,718
-  
-# ]
+
 POKEDEX_BANLIST = %w(
   arceus
   calyrex-ice
@@ -15,7 +11,8 @@ POKEDEX_BANLIST = %w(
   deoxys-normal
   deoxys-attack
   deoxys-speed
-  dialga 
+  dialga
+  dialga-origin
   dracovish
   dragapult
   eternatus
@@ -41,6 +38,7 @@ POKEDEX_BANLIST = %w(
   necrozma-dawn-wings
   necrozma-dusk-mane
   palkia
+  palkia-origin
   pheromosa
   rayquaza
   regieleki
@@ -129,12 +127,15 @@ GEN_9_POKEDEX = %w(
   enamorus-incarnate
 )
 
+RIGGED_POKEDEX = [203, 563, 867]
+
 # recursively returns valid evos
 def trace_evo_tree(chain, base_form, passed_base_form)
   # stupid edge cases
   return ['urshifu-rapid-strike'] if base_form == 'kubfu'
   return ['you decide'] if base_form == 'eevee'
   return ['lol, lmao'] if chain['species']['name'] == 'cosmog'
+  return ['manaph...haha just kidding sylvee'] if base_form == 'phione'
   output = []
   if passed_base_form && !POKEDEX_BANLIST.include?(chain['species']['name'])
    output += [chain['species']['name'].capitalize]
@@ -167,7 +168,7 @@ def setup_rng_commands(bot)
       for i in 1..num do
         poke_name = ''
         loop do
-          next_id = rand(1..MAX_ROLL_NUM)
+          next_id = event.options['rig'] ? RIGGED_POKEDEX.sample : rand(1..MAX_ROLL_NUM)
           if next_id <= MAX_POKEDEX_NUM
             response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
             response = JSON.parse(response)
@@ -199,8 +200,9 @@ def setup_rng_commands(bot)
         end
         
       end
+      embed_title = event.options['rig'] ? "Rigged team of #{num}:" : "Team of #{num}:"
       response_embed = Discordrb::Webhooks::Embed.new(
-        title: "Team of #{num}:"
+        title: embed_title
       )
       output_names.each_with_index do |output, i|
         response_embed.add_field(name: "##{output_ids[i]}", value: output)
