@@ -5,7 +5,6 @@ POKEDEX_BANLIST = %w(
   arceus
   calyrex-ice
   calyrex-shadow
-  cinderace
   darkrai
   darmanitan-galar
   deoxys-normal
@@ -14,7 +13,6 @@ POKEDEX_BANLIST = %w(
   dialga
   dialga-origin
   dracovish
-  dragapult
   eternatus
   eternatus-eternamax
   genesect
@@ -52,7 +50,6 @@ POKEDEX_BANLIST = %w(
   yveltal
   zacian
   zacian-crowned
-  zamazenta
   zamazenta-crowned
   zekrom
   zygarde
