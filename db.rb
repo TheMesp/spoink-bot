@@ -20,8 +20,6 @@ def setup
 		# fetch the table name from the csv name
 		tablename = filename.match(/(\w+)\.csv/).to_a[1]
 		headers = []
-		req_json = {};
-		req_json[tablename] = [];
 		CSV.foreach(filename) do |row|
 			if headers.empty?
 				headers = row
@@ -30,7 +28,6 @@ def setup
 				headers.each_with_index do |header, i|
 					row_hash[header] = row[i]
 				end
-				req_json[tablename] << row_hash;
 				HTTParty.post("http://localhost:3000/#{tablename}/", type: 'application/json', body: row_hash)
 			end
 		end
