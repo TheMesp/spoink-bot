@@ -1,5 +1,6 @@
-MAX_POKEDEX_NUM = 898
+
 MAX_ROLL_NUM = 1008
+MAX_POKEDEX_NUM = MAX_ROLL_NUM
 
 POKEDEX_BANLIST = %w(
   arceus
@@ -30,6 +31,7 @@ POKEDEX_BANLIST = %w(
   lunala
   marshadow
   magearna
+  magearna-original
   melmetal
   mewtwo
   naganadel
@@ -53,74 +55,15 @@ POKEDEX_BANLIST = %w(
   zamazenta-crowned
   zekrom
   zygarde
-)
-
-GEN_9_POKEDEX = %w(
-  meowscarada
-  skeledirge
-  quaquaval
-  oinkologne
-  spidops
-  lokix
-  pawmot
-  maushold
-  dachsbun
-  arboliva
-  squawkabilly
-  garganacl
-  armarouge
-  ceruledge
-  bellibolt
-  kilowattrel
-  mabosstiff
-  grafaiai
-  brambleghast
-  toedscruel
-  klawf
-  scovillain
-  rabsca
-  espathra
-  tinkaton
-  wugtrio
-  bombirdier
-  revavroom
-  cyclizar
-  orthworm
-  glimmora
-  flamigo
-  cetitan
-  veluza
-  dondozo
-  tatsugiri
-  annihilape
-  clodsire
-  farigiraf
-  dudunsparce
-  kingambit
-  great-tusk
-  scream-tail
-  brute-bonnet
-  slither-wing
-  sandy-shocks
-  iron-treads
-  iron-hands
-  iron-jugulis
-  iron-moth
-  iron-thorns
-  baxcalibur
-  gholdengo
-  wo-chien
-  ting-lu
-  roaring-moon
-  iron-valiant
-  wyrdeer
-  kleavor
-  ursaluna
-  basculegion
-  sneasler
-  overqwil
-  enamorus-therian
-  enamorus-incarnate
+  palafin-hero
+  palafin
+  houndstone
+  flutter-mane
+  iron-bundle
+  chien-pao
+  chi-yu
+  koraidon
+  miraidon
 )
 
 RIGGED_POKEDEX = [203, 563, 867]
@@ -161,10 +104,13 @@ def setup_rng_commands(bot)
       num = !event.options['num'] ? 6 : event.options['num'].to_i
       output_names = []
       output_ids = []
+      print("rolling\n")
       for i in 1..num do
         poke_name = ''
         loop do
           next_id = event.options['rig'] ? RIGGED_POKEDEX.sample : rand(1..MAX_ROLL_NUM)
+          print next_id
+          print("\n")
           if next_id <= MAX_POKEDEX_NUM
             response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
             response = JSON.parse(response)
