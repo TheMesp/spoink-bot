@@ -134,8 +134,7 @@ def setup_rng_commands(bot)
               break
             end
           else
-            # Hardcoding gen 9s, woo
-            output_names << GEN_9_POKEDEX.sample.capitalize
+            output_names << "UNKNOWN"
             output_ids << "???"
             break
           end
