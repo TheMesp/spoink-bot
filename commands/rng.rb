@@ -44,6 +44,7 @@ POKEDEX_BANLIST = %w(
   regieleki
   reshiram
   shaymin-sky
+  shedinja
   solgaleo
   spectrier
   tornadus-therian
