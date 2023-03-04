@@ -1,6 +1,6 @@
 
-MAX_ROLL_NUM = 1008
-MAX_POKEDEX_NUM = MAX_ROLL_NUM
+MAX_ROLL_NUM = 1010
+MAX_POKEDEX_NUM = 1008
 
 POKEDEX_BANLIST = %w(
   arceus
@@ -65,6 +65,11 @@ POKEDEX_BANLIST = %w(
   chi-yu
   koraidon
   miraidon
+)
+
+HARDCODED_POKEDEX = %w(
+  walking-wake
+  iron-leaves
 )
 
 RIGGED_POKEDEX = [203, 563, 867]
@@ -135,7 +140,7 @@ def setup_rng_commands(bot)
               break
             end
           else
-            output_names << "UNKNOWN"
+            output_names << HARDCODED_POKEDEX.sample
             output_ids << "???"
             break
           end
