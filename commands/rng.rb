@@ -123,7 +123,7 @@ def setup_rng_commands(bot)
             temp_name = ""
             loop do
               temp_name = response['varieties'].sample['pokemon']['name']
-              unless temp_name.include?('mega') || temp_name.include?('gmax') || temp_name.include?('totem')
+              unless temp_name.include?('-mega') || temp_name.include?('-gmax') || temp_name.include?('-totem')
                 break
               end
             end     
