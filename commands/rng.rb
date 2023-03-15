@@ -72,7 +72,7 @@ HARDCODED_POKEDEX = %w(
   iron-leaves
 )
 
-RIGGED_POKEDEX = [203, 563, 867]
+RIGGED_POKEDEX = [203, 563, 867, 981]
 
 # recursively returns valid evos
 def trace_evo_tree(chain, base_form, passed_base_form)
