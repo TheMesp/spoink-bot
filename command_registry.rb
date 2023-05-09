@@ -6,4 +6,7 @@ def register_commands(bot)
     cmd.integer('num', 'The number of pokemon to roll')
     cmd.boolean('rig', 'Rig the roll?')
   end
+
+  bot.register_application_command(:parselog, nil, type: :message) do |cmd|
+  end
 end
