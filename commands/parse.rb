@@ -7,7 +7,7 @@ end
 # removes the positional marker from hash keys to not see double in double battles
 def uniformize_key(input)
   # TODO: regex to check format
-  output = input
+  output = "#{input}"
   output[2] = ":"
   return output
 end
@@ -32,6 +32,7 @@ def setup_parse_commands(bot)
       spike_setter =  [nil, nil]
       tspike_setter = [nil, nil]
       team_user = ["", ""]
+      winner = ""
 
       response.split("\n").each do |line|
         # puts line
@@ -52,7 +53,7 @@ def setup_parse_commands(bot)
               name = fields[3].split(",")[0]
               nickname = fields[2].split(" ")[1..-1].join(" ")
               team = fields[2][1].to_i
-              poke_hash[key] = Pokemon.new(name, nickname, 0, "", team)
+              poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil)
             end
 
           when "move"
@@ -132,10 +133,15 @@ def setup_parse_commands(bot)
               last_damager.kills += 1
               # puts "#{last_damager.name} knocked out #{victim}"
             end
+          
+          when "win"
+            winner = fields[2]
+
           else
           end
         end # if fields.size > 0
       end # response.split("\n").each do |line|
+      output += "Winner: #{winner}\n\n"
       poke_hash.each_pair do |k,v|
         output += "Team #{team_user[v.team-1]}: #{v.name} (#{v.nickname}) got #{v.kills} KO#{v.kills > 1 ? "s" : ""}\n" if v.kills > 0
       end
@@ -143,8 +149,3 @@ def setup_parse_commands(bot)
     end
   end
 end
-# parse_log("https://replay.pokemonshowdown.com/gen8doublescustomgame-1650614891");
-# parse_log("https://replay.pokemonshowdown.com/gen8nationaldex-1476000200");
-# parse_log("https://replay.pokemonshowdown.com/gen8nationaldex-1476004100");
-# parse_log("https://replay.pokemonshowdown.com/gen8doublescustomgame-1711114645");
-# parse_log("https://replay.pokemonshowdown.com/gen9customgame-1858660514-gg007w3p4zsftrrl0m0qp4citylqowcpw");
