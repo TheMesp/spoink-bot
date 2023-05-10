@@ -18,8 +18,8 @@ def setup_parse_commands(bot)
     unless /^https:\/\/replay\.pokemonshowdown\.com\/[a-z0-9]+-\d+-?[a-z0-9]*$/ =~ replay_link
       event.respond(content: "Incorrect usage! Please use me on a message containing only a showdown replay link.", ephemeral: true)
     else
-      event.respond(content: "Spoink is thinking and bouncing...")
-      output = ""
+      event.respond(content: "Spoink is thinking and bouncing...", ephemeral: true)
+      output = "Link: #{replay_link}\n"
       poke_hash = Hash.new
       response = `curl -s #{replay_link}.log`
       if(response.nil? || response.split("\n").size == 0)
@@ -33,6 +33,7 @@ def setup_parse_commands(bot)
       tspike_setter = [nil, nil]
       team_user = ["", ""]
       winner = ""
+      cause = ""
 
       response.split("\n").each do |line|
         # puts line
@@ -59,27 +60,35 @@ def setup_parse_commands(bot)
           when "move"
             # grab pokemon name
             last_damager = poke_hash[key]
+            cause = fields[3]
 
           when "-damage"
             # non-move sources of damage
             if(fields.size >= 5)
               if(fields.size >= 6 && fields[5].split(" ")[0] == "[of]")
                 last_damager = poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))]
+                cause = "retaliation damage"
               else
                 from = fields[4].split(" ")[1..-1].join(" ")
                 case from
                 when "item: Life Orb"
                   last_damager = poke_hash[key]
+                  cause = "Life Orb chip"
                 when "Stealth Rock"
                   last_damager = rock_setter[poke_hash[key].team%2]
+                  cause = "Stealth Rock chip"
                 when "Spikes"
                   last_damager = spike_setter[poke_hash[key].team%2]
+                  cause = "Spikes chip"
                 when "psn", "brn", "tox"
                   last_damager = poke_hash[key].status
+                  cause = "status damage"
                 when "Sandstorm", "Hail"
                   last_damager = weather_setter
+                  cause = "weather chip"
                 when "Salt Cure"
                   last_damager = poke_hash[key].indirect
+                  cause = "Salt Cure chip"
                 else
                 end
               end             
@@ -104,6 +113,7 @@ def setup_parse_commands(bot)
             activation = fields[3].split(" ")[1..-1].join(" ")
             if(["Destiny Bond", "Aftermath", "Toxic Debris"].include?(activation))
               last_damager = poke_hash[key]
+              cause = activation
             end
 
           when "-weather"
@@ -126,7 +136,7 @@ def setup_parse_commands(bot)
 
           when "faint"
             victim = poke_hash[key].name
-            puts "#{victim} faint event"
+            output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
             if(poke_hash[key] == last_damager)
               # puts "#{last_damager.name} self-KO'd"
             else
@@ -141,9 +151,9 @@ def setup_parse_commands(bot)
           end
         end # if fields.size > 0
       end # response.split("\n").each do |line|
-      output += "Winner: #{winner}\n\n"
+      output += "\nWinner: #{winner}\n\n"
       poke_hash.each_pair do |k,v|
-        output += "Team #{team_user[v.team-1]}: #{v.name} (#{v.nickname}) got #{v.kills} KO#{v.kills > 1 ? "s" : ""}\n" if v.kills > 0
+        output += "Team #{team_user[v.team-1]}: #{v.name}#{v.name == v.nickname ? "" : " (#{v.nickname})"} got #{v.kills} KO#{v.kills > 1 ? "s" : ""}\n" if v.kills > 0
       end
       event.edit_response(content: output)
     end
