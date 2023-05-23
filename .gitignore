@@ -1,6 +1,8 @@
 # Protect token
 secrets.rb
 
+data/*
+
 *.gem
 *.rbc
 /.config
