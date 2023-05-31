@@ -73,9 +73,7 @@ def setup_draft_commands(bot)
     if File.exists? "/root/discordbots/spoink-project/spoink-bot/data/#{event.options['user']}.draft"
       word = ""
       File.foreach("/root/discordbots/spoink-project/spoink-bot/data/#{event.options['user']}.draft") do |row|
-        row.each do |field|
-          word << field[0]
-        end
+        word << row[0]
       end
       word << event.options['next'] if event.options['next']
       event.edit_response(content: "https://wordfinderx.com/words-for/_/words-start-with/#{word}/length/6/?dictionary=all_en&extended_fields=true")
