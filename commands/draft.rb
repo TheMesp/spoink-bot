@@ -11,25 +11,51 @@ def check_unique(pokemon)
   return nil
 end
 
+def has_role(role_id, roles)
+  roles.each do |role|
+    return true if role.id == role_id
+  end
+  return false
+end
+
 def setup_draft_commands(bot)
   bot.application_command(:draft).subcommand(:submit) do |event|
-    event.respond(content: "Spoink is thinking and bouncing...", ephemeral: true)
-    pokemon = event.options['pokemon'].gsub(/[^a-zA-Z0-9\-]/,'').gsub(" ","-").downcase # Clean that so i don't get injected plzty
-    response = `curl -s https://pokeapi.co/api/v2/pokemon/#{pokemon}`
-    if response == 'Not Found'
-      event.edit_response(content:"#{pokemon} is not a recognized pokemon! Remember to watch format!\ne.g. Mr. Mime and Alolan Raticate exist as `mr-mime` and `raticate-alola`.")
-    elsif POKEDEX_BANLIST.include? pokemon
-      event.edit_response(content:"#{pokemon} is banned!")
+    unless(has_role(1062484645578551337, event.user.roles))
+      event.respond(content: "You are not a mod and cannot use this command.", ephemeral: true)
     else
-      other = check_unique(pokemon)
-      if !other.nil?
-        event.edit_response(content: "#{pokemon} is already drafted by <@#{other}>")
-      else
-        File.open("/root/discordbots/spoink-project/spoink-bot/data/#{event.options['user']}.draft", "a") do |f|
-          f.write("#{pokemon}\n")
+      event.respond(content: "Spoink is thinking and bouncing...", ephemeral: true)
+      # update count
+      unless File.exist?("/root/discordbots/spoink-project/spoink-bot/data/count")
+        File.open("/root/discordbots/spoink-project/spoink-bot/data/count", "w") do |f|
+          f.write("0")
         end
-        event.edit_response(content: "Draft pick ok, all clear")
-        event.send_message(content: "<@#{event.options['user']}> has drafted #{pokemon}", ephemeral: false)
+      end
+      count = 0
+      File.foreach("/root/discordbots/spoink-project/spoink-bot/data/count") do |row|
+        count = row.to_i
+      end
+      count += 1
+      File.open("/root/discordbots/spoink-project/spoink-bot/data/count", "w") do |f|
+        f.write("#{count}")
+      end
+      # Handle draft submission
+      pokemon = event.options['pokemon'].gsub(/[^a-zA-Z0-9\-]/,'').gsub(" ","-").downcase # Clean that so i don't get injected plzty
+      response = `curl -s https://pokeapi.co/api/v2/pokemon/#{pokemon}`
+      if response == 'Not Found'
+        event.edit_response(content:"#{pokemon} is not a recognized pokemon! Remember to watch format!\ne.g. Mr. Mime and Alolan Raticate exist as `mr-mime` and `raticate-alola`.")
+      elsif POKEDEX_BANLIST.include? pokemon
+        event.edit_response(content:"#{pokemon} is banned!")
+      else
+        other = check_unique(pokemon)
+        if !other.nil?
+          event.edit_response(content: "#{pokemon} is already drafted by <@#{other}>")
+        else
+          File.open("/root/discordbots/spoink-project/spoink-bot/data/#{event.options['user']}.draft", "a") do |f|
+            f.write("#{pokemon}\n")
+          end
+          event.edit_response(content: "Draft pick ok, all clear")
+          event.send_message(content: "With pick ##{count}, <@#{event.options['user']}> has drafted #{pokemon}", ephemeral: false)
+        end
       end
     end
   end
