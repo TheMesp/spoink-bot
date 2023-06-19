@@ -25,5 +25,8 @@ def register_commands(bot)
     group.subcommand(:check_pick, 'check that a pick is available') do |sub|
       sub.string('pokemon', 'pokemon to check', required: true)
     end
+    group.subcommand(:check_letter, 'check the pokemon already taken for a letter') do |sub|
+      sub.string('letter', 'letter to check', required: true)
+    end
   end
 end

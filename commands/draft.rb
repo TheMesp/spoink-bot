@@ -126,4 +126,30 @@ def setup_draft_commands(bot)
       end
     end
   end
+
+  bot.application_command(:draft).subcommand(:check_letter) do |event|
+    event.respond(content: "Spoink is thinking and bouncing...", ephemeral: true)
+    forbidden = []
+    letter = event.options['letter'][0].downcase
+    POKEDEX_BANLIST.each do |pokemon|
+      forbidden << pokemon if pokemon[0] == letter
+    end
+    
+    Dir.glob("/root/discordbots/spoink-project/spoink-bot/data/*.draft") do |filename|
+      File.foreach("#{filename}") do |row|
+        forbidden << row.strip if row[0] == letter
+      end
+    end
+    title = "Invalid options for #{letter}:"
+    output = forbidden.join(", ")
+    output = "nothing" if forbidden.empty?
+    
+    unless output.empty?
+      response_embed = Discordrb::Webhooks::Embed.new(
+        title: title,
+        description: output
+      )
+      event.edit_response(embeds:[response_embed.to_hash])
+    end
+  end
 end
