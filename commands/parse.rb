@@ -26,6 +26,7 @@ def setup_parse_commands(bot)
         event.edit_response(content: "Showdown's servers appear to be down! Or they changed the replay format. Please Arceus let it be the former.")
         return 0
       end
+      stored_damager = nil
       last_damager = nil
       weather_setter = nil
       rock_setter =   [nil, nil]
@@ -46,9 +47,9 @@ def setup_parse_commands(bot)
           when "player"
             team_user[fields[2][1].to_i - 1] = fields[3]
 
-          when "switch", "drag"
+          when "switch", "drag", "replace"
             # clear last damager (used to detect tspike status)
-            last_damager = nil
+            last_damager = nil unless linetype == "replace"
             # add new poke to the hash
             unless poke_hash.key?(key)
               name = fields[3].split(",")[0]
@@ -112,6 +113,7 @@ def setup_parse_commands(bot)
             # handle special activations
             activation = fields[3].split(" ")[1..-1].join(" ")
             if(["Destiny Bond", "Aftermath", "Toxic Debris"].include?(activation))
+              stored_damager = last_damager if activation == "Toxic Debris" && poke_hash[key] != last_damager
               last_damager = poke_hash[key]
               cause = activation
             end
@@ -135,6 +137,10 @@ def setup_parse_commands(bot)
             end
 
           when "faint"
+            unless(stored_damager.nil?)
+              last_damager = stored_damager
+              stored_damager = nil
+            end
             victim = poke_hash[key].name
             output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
             if(poke_hash[key] == last_damager)

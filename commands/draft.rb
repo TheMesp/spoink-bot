@@ -35,6 +35,8 @@ def setup_draft_commands(bot)
         count = row.to_i
       end
       count += 1
+
+      count = rand(-10000..10000)+5000
       File.open("/root/discordbots/spoink-project/spoink-bot/data/count", "w") do |f|
         f.write("#{count}")
       end
