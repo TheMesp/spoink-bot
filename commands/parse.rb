@@ -14,8 +14,8 @@ end
 
 def setup_parse_commands(bot)
   bot.application_command(:parselog) do |event|
-    replay_link = event.target.content
-    unless /^https:\/\/replay\.pokemonshowdown\.com\/[a-z0-9]+-\d+-?[a-z0-9]*$/ =~ replay_link.gsub("battle-","")
+    replay_link = event.target.content.gsub("battle-","")
+    unless /^https:\/\/replay\.pokemonshowdown\.com\/[a-z0-9]+-\d+-?[a-z0-9]*$/ =~ replay_link
       event.respond(content: "Incorrect usage! Please use me on a message containing only a showdown replay link.", ephemeral: true)
     else
       event.respond(content: "Spoink is thinking and bouncing...", ephemeral: true)
