@@ -5,7 +5,13 @@ def reset_elo
     @diff_dict = Hash.new(0)
     @maxelo_dict = Hash.new(0)
     @matchage_dict = Hash.new(0)
+    @matchup_dict = Hash.new(0)
     @currmatch = 0
+end
+
+def add_matchup(player1, player2)
+    key = [player1, player2].sort().join("-")
+    @matchup_dict[key] = @matchup_dict[key] + 1 
 end
 
 def calc_match_probability(winner, loser)
@@ -13,6 +19,7 @@ def calc_match_probability(winner, loser)
 end
 
 def process_match(player1, player2, constant, outcome)
+    add_matchup(player1,player2)
     @currmatch += 1;
     @matchage_dict[player1] = @currmatch;
     @matchage_dict[player2] = @currmatch;
@@ -58,6 +65,12 @@ def calc_elo_dict(player = nil)
             symbol = @diff_dict[key] < 0 ? '-' : '+';
             print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + 100 < @currmatch
         end
+
+        # print("\nMatchup stats:\n\n")
+        # matchups = @matchup_dict.sort_by {|k, v| -v}
+        # matchups.each do |key,value|
+        #     print("#{key}: #{value} faceoffs\n") if(key.include?("emily"))
+        # end
         
     end
 end

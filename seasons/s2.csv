@@ -2,7 +2,7 @@ serpy,orang,0,szn 2 week 1
 simon,ghostly,0,
 speedy,vector,1,
 furret1,emperor,1,
-orange,ddiamond,1,
+bismuth,ddiamond,1,
 ginger,kozak,0,
 jacob,henke,0,
 cynda,orbit,0,
@@ -10,7 +10,7 @@ serpy,simon,1,szn 2 week 2
 orang,ghostly,1,
 speedy,furret1,0,
 vector,emperor,1,
-orange,ginger,0,
+bismuth,ginger,0,
 ddiamond,kozak,1,
 jacob,cynda,0,
 henke,orbit,0,
@@ -21,12 +21,12 @@ jacob,speedy,0,
 ghostly,kozak,0,
 simon,ginger,1,
 ddiamond,orang,0,
-orange,serpy,1,
+bismuth,serpy,1,
 serpy,ghostly,1,szn 2 week 4
 orang,speedy,0,
 emperor,simon,1,
 vector,furret1,1,
-orange,kozak,1,
+bismuth,kozak,1,
 ddiamond,jacob,1,
 orbit,ginger,1,
 henke,cynda,0,
@@ -34,13 +34,13 @@ serpy,speedy,0,szn 2 week 5
 vector,simon,1,
 ghostly,furret1,0,
 emperor,simon,0,
-orange,jacob,1,
+bismuth,jacob,1,
 henke,ginger,0,
 kozak,cynda,0,
 orbit,ddiamond,1,
 serpy,ddiamond,1,szn 2 week 6
 orang,ginger,1,
-simon,orange,1,
+simon,bismuth,1,
 ghostly,jacob,1,
 speedy,henke,1,
 vector,cynda,1,
@@ -50,7 +50,7 @@ serpy,vector,0,szn 2 week 7
 orang,furret1,0,
 simon,speedy,1,
 emperor,ghostly,1,
-orange,henke,0,
+bismuth,henke,0,
 ddiamond,cynda,0,
 ginger,jacob,0,
 orbit,kozak,1,
@@ -58,7 +58,7 @@ serpy,furret1,1,szn 2 week 8
 simon,orang,0,
 speedy,emperor,1,
 ghostly,vector,0,
-orange,cynda,0,
+bismuth,cynda,0,
 ginger,ddiamond,1,
 jacob,orbit,0,
 kozak,henke,0,
@@ -68,20 +68,20 @@ jacob,simon,0,
 henke,ghostly,1,
 cynda,speedy,0,
 orbit,vector,0,
-orange,furret1,1,
+bismuth,furret1,1,
 ddiamond,emperor,0,
 emperor,serpy,0,szn 2 week 10
 vector,orang,1,
 speedy,ghostly,1,
 simon,furret1,0,
-orbit,orange,1,
+orbit,bismuth,1,
 henke,ddiamond,1,
 jacob,kozak,1,
 ginger,cynda,0,
 simon,orang,0,szn 2 sword conf wc
 furret1,serpy,1,
 speedy,vector,0,sword conf 7th
-orange,kozak,1,szn 2 shield conf wc
+bismuth,kozak,1,szn 2 shield conf wc
 henke,ginger,0,
 orbit,cynda,1,shield conf 7th
 ghostly,serpy,0,sword conf div
@@ -89,7 +89,7 @@ emperor,simon,0,
 furret1,orang,0,sword conf 5th
 henke,jacob,1,shield conf div
 kozak,ddiamond,0,
-orange,ginger,1,shield conf 5th
+bismuth,ginger,1,shield conf 5th
 ghostly,emperor,0,sword conf finals
 simon,serpy,1,sword conf 3rd
 kozak,jacob,0,shield conf finals

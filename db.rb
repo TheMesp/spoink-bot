@@ -28,7 +28,8 @@ def setup
 				headers.each_with_index do |header, i|
 					row_hash[header] = row[i]
 				end
-				HTTParty.post("http://localhost:3000/#{tablename}/", type: 'application/json', body: row_hash)
+				print row_hash
+				# HTTParty.post("http://localhost:3000/#{tablename}/", type: 'application/json', body: row_hash)
 			end
 		end
 		

@@ -4,7 +4,7 @@ aspie,turtle,0,
 cynda,ocho,0,
 lillian,serpy,1,
 mesp,whyachi,1,
-mattyp,orange,0,
+mattyp,bismuth,0,
 sylvee,flare,0,
 woef,orang,1,
 crobatoh,risa,1,
@@ -17,7 +17,7 @@ ginger,tryyal,0,
 ghostly,sylvee,1,
 webster,ocho,1,
 titan,turtle,0,
-lillian,orange,1,
+lillian,bismuth,1,
 popzix,jacob,1,
 mesp,flare,1,
 risa,mattyp,0,
@@ -28,7 +28,7 @@ wof,mattyp,1,
 mesp,ghostly,0,
 risa,lillian,0,
 woef,flare,1,
-orange,cynda,0,
+bismuth,cynda,0,
 aspie,whyachi,1,
 serpy,webster,0,
 titan,orang,1,
@@ -36,7 +36,7 @@ ocho,ginger,1,
 turtle,tryyal,1,
 orang,serpy,0,s6w4
 ocho,whyachi,1
-turtle,orange,1
+turtle,bismuth,1
 tryyal,flare,1
 ginger,risa,1
 titan,ghostly,1
@@ -47,7 +47,7 @@ june,sylvee,1
 lillian,mattyp,1
 mesp,popzix,0
 serpy,whyachi,1,s6w5
-orang,orange,0
+orang,bismuth,0
 ocho,flare,1
 turtle,risa,1
 tryyal,ghostly,1
@@ -68,10 +68,10 @@ turtle,wof,0
 ghostly,ocho,0
 orang,risa,1
 flare,serpy,0
-whyachi,orange,0
+whyachi,bismuth,0
 june,popzix,0
 flare,risa,1,s6w7
-orange,ghostly,1
+bismuth,ghostly,1
 whyachi,wof,0
 serpy,jacob,1
 orang,crobatoh,1
@@ -86,7 +86,7 @@ webster,popzix,1,s6w8
 titan,aspie,1
 ghostly,risa,1
 wof,flare,0
-jacob,orange,0
+jacob,bismuth,0
 crobatoh,whyachi,0
 sylvee,serpy,0
 mattyp,orang,0
@@ -96,7 +96,7 @@ june,tryyal,0
 cynda,ginger,1
 wof,jacob,1,s6w9
 risa,sylvee,0
-orange,mesp,1
+bismuth,mesp,1
 serpy,june,1
 ocho,aspie,0
 turtle,webster,1
@@ -111,7 +111,7 @@ wof,sylvee,0
 ghostly,mattyp,1
 risa,mesp,0
 flare,lillian,0
-orange,june,1
+bismuth,june,1
 whyachi,cynda,1
 serpy,aspie,0
 orang,webster,1
@@ -126,7 +126,7 @@ aspie,wof,1
 ghostly,webster,0
 titan,risa,1
 flare,ginger,0
-orange,tryyal,0
+bismuth,tryyal,0
 turtle,whyachi,1
 serpy,ocho,1
 popzix,orang,0
@@ -138,16 +138,16 @@ lillian,jacob,1
 ghostly,cynda,1
 aspie,risa,1
 flare,webster,1
-titan,orange,1
+titan,bismuth,1
 whyachi,ginger,1
 turtle,orang,1
 serpy,tryyal,1
 titan,turtle,1,s6 bottom bracket
 aspie,serpy,1
-orange,lillian,0
+bismuth,lillian,0
 webster,tryyal,1
 serpy,turtle,1
-orange,tryyal,1
+bismuth,tryyal,1
 turtle,tryyal,1
 risa,wof,0,s6 left playoffs
 mattyp,orang,0
