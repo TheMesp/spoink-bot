@@ -1,5 +1,5 @@
 require 'csv'
-
+STALE_MATCH_CUTOFF = 25
 def reset_elo
     @elo_dict = Hash.new(1000)
     @diff_dict = Hash.new(0)
@@ -58,12 +58,12 @@ def calc_elo_dict(player = nil)
         print("Active players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + 100 >= @currmatch
+            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
         end
         print("\nInactive players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + 100 < @currmatch
+            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF < @currmatch
         end
 
         # print("\nMatchup stats:\n\n")
