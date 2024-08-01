@@ -58,12 +58,12 @@ def calc_elo_dict(player = nil)
         print("Active players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
+            print("#{symbol}#{key}: #{value.to_i}#{key.length==9?"":"\t"}(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
         end
         print("\nInactive players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}\t(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF < @currmatch
+            print("#{symbol}#{key}: #{value.to_i}#{key.length==9?"":"\t"}(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF < @currmatch
         end
 
         # print("\nMatchup stats:\n\n")
