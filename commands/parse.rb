@@ -1,15 +1,18 @@
 require 'json'
 
-Pokemon = Struct.new(:name, :nickname, :kills, :status, :team, :indirect) do
+Pokemon = Struct.new(:name, :nickname, :kills, :status, :team, :indirect, :retaliation_storage, :perish_setter) do
   kills = 0;
 end
 
 # removes the positional marker from hash keys to not see double in double battles
 def uniformize_key(input)
-  # TODO: regex to check format
-  output = "#{input}"
-  output[2] = ":"
-  return output
+  if((input =~ /p\d[abcd]/) != nil)
+    output = "#{input}"
+    output[2] = ":"
+    return output
+  else
+    return "BAD KEY"
+  end
 end
 
 def setup_parse_commands(bot)
@@ -27,6 +30,7 @@ def setup_parse_commands(bot)
         return 0
       end
       stored_damager = nil
+      future_sight_setter = nil
       last_damager = nil
       weather_setter = nil
       rock_setter =   [nil, nil]
@@ -35,6 +39,7 @@ def setup_parse_commands(bot)
       team_user = ["", ""]
       winner = ""
       cause = ""
+      stored_cause = ""
 
       response.split("\n").each do |line|
         # puts line
@@ -44,8 +49,13 @@ def setup_parse_commands(bot)
           key = uniformize_key(fields[2]) unless fields.size < 3 || fields[2].size < 3
           case linetype
 
+          when "poke"
+            if fields[3].include? "Zoroark"
+              output += "\n**WARNING: ZOROARK DETECTED. MANUAL VERIFICATION OF KILLS RECOMMENDED.**\n\n"
+            end
+
           when "player"
-            team_user[fields[2][1].to_i - 1] = fields[3]
+            team_user[fields[2][1].to_i - 1] = fields[3] if fields.size >= 5
 
           when "switch", "drag", "replace"
             # clear last damager (used to detect tspike status)
@@ -55,26 +65,32 @@ def setup_parse_commands(bot)
               name = fields[3].split(",")[0]
               nickname = fields[2].split(" ")[1..-1].join(" ")
               team = fields[2][1].to_i
-              poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil)
+              poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil, "", nil)
             end
 
           when "move"
             # grab pokemon name
-            last_damager = poke_hash[key]
+            last_damager = poke_hash[key]            
             cause = fields[3]
+            poke_hash[uniformize_key(fields[4])].retaliation_storage = nil if fields.size >= 5 && uniformize_key(fields[4]) != "BAD KEY"
 
           when "-damage"
             # non-move sources of damage
             if(fields.size >= 5)
               if(fields.size >= 6 && fields[5].split(" ")[0] == "[of]")
+                poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))].retaliation_storage = last_damager
                 last_damager = poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))]
-                cause = "retaliation damage"
+                stored_cause = cause
+                cause = fields[4].split(" ")[1..-1].join(" ")
               else
                 from = fields[4].split(" ")[1..-1].join(" ")
                 case from
                 when "item: Life Orb"
                   last_damager = poke_hash[key]
                   cause = "Life Orb chip"
+                when "Recoil"
+                  last_damager = poke_hash[key]
+                  cause = "#{cause} recoil"
                 when "Stealth Rock"
                   last_damager = rock_setter[poke_hash[key].team%2]
                   cause = "Stealth Rock chip"
@@ -105,8 +121,25 @@ def setup_parse_commands(bot)
             end
 
           when "-start"
-            if(fields.size >= 4 && fields[3] == "Salt Cure")
+            move = fields[3].gsub("move: ","")
+            if(move == "Salt Cure")
               poke_hash[key].indirect = last_damager
+            elsif(move == "Future Sight")
+              future_sight_setter = poke_hash[key]
+            elsif(fields.size >= 5 && move == "perish3" )
+              poke_hash[key].perish_setter = last_damager
+            elsif(move == "perish0")
+              last_damager = poke_hash[key].perish_setter
+              poke_hash[key].retaliation_storage = nil
+              cause = "Perish Song"
+            end
+
+          when "-end" 
+            move = fields[3].split(" ")[1..-1].join(" ")
+            if(move == "Future Sight")
+              last_damager = future_sight_setter
+              future_sight_setter = nil
+              cause = "Future Sight"
             end
 
           when "-activate"
@@ -137,17 +170,20 @@ def setup_parse_commands(bot)
             end
 
           when "faint"
+            victim = poke_hash[key].name
             unless(stored_damager.nil?)
               last_damager = stored_damager
               stored_damager = nil
-            end
-            victim = poke_hash[key].name
-            output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
-            if(poke_hash[key] == last_damager)
-              # puts "#{last_damager.name} self-KO'd"
-            else
-              last_damager.kills += 1
-              # puts "#{last_damager.name} knocked out #{victim}"
+            end            
+            if(!(poke_hash[key].retaliation_storage.nil?) && !(stored_cause.empty?)) # Literally only for when you kill a guy but then die to the retaliation of like, rough skin or something
+              output += "#{victim} was KO'd by #{poke_hash[key].retaliation_storage.name} via #{stored_cause}\n"
+              poke_hash[key].retaliation_storage.kills += 1
+              stored_cause = ""
+            else                        
+              output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
+              unless(poke_hash[key] == last_damager)
+                last_damager.kills += 1
+              end
             end
           
           when "win"
