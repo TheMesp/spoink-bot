@@ -72,13 +72,15 @@ def setup_parse_commands(bot)
             # grab pokemon name
             last_damager = poke_hash[key]            
             cause = fields[3]
+            last_damager.retaliation_storage = nil
             poke_hash[uniformize_key(fields[4])].retaliation_storage = nil if fields.size >= 5 && uniformize_key(fields[4]) != "BAD KEY"
 
           when "-damage"
             # non-move sources of damage
             if(fields.size >= 5)
-              if(fields.size >= 6 && fields[5].split(" ")[0] == "[of]")
-                poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))].retaliation_storage = last_damager
+              if(fields.size >= 6 && fields[5].split(" ")[0] == "[of]" && poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))].retaliation_storage.nil?)
+                attacker = uniformize_key(fields[5].split(" ")[1..-1].join(" "))
+                poke_hash[attacker].retaliation_storage = last_damager
                 last_damager = poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))]
                 stored_cause = cause
                 cause = fields[4].split(" ")[1..-1].join(" ")
