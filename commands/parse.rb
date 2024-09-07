@@ -104,6 +104,9 @@ def parse_log(replay_link)
             when "Salt Cure"
               last_damager = poke_hash[key].indirect
               cause = "Salt Cure chip"
+            when "confusion"
+              last_damager = poke_hash[key]
+              cause = "hitting itself"
             else
             end
           end             
@@ -112,6 +115,8 @@ def parse_log(replay_link)
       when "-status"
         if(fields.size >= 5 && fields[4].split(" ")[1] == "item")
           poke_hash[key].status = poke_hash[key]
+        elsif(fields.size >= 6 && fields[5].split(" ")[0] == "[of]")
+          poke_hash[key].status = poke_hash[uniformize_key(fields[5].split(" ")[1..-1].join(" "))]
         elsif(last_damager.nil?)
           poke_hash[key].status = tspike_setter[poke_hash[key].team%2]
         else
