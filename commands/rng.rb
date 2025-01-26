@@ -1,10 +1,8 @@
 require_relative "../data/banlist.rb"
-MAX_ROLL_NUM = 1010
-MAX_POKEDEX_NUM = 1008
+MAX_ROLL_NUM = 1025
+MAX_POKEDEX_NUM = 1025
 
 HARDCODED_POKEDEX = %w(
-  walking-wake
-  iron-leaves
 )
 
 RIGGED_POKEDEX = [203, 563, 867, 981]

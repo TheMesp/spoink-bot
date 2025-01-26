@@ -59,7 +59,7 @@ def parse_log(replay_link)
           name = fields[3].split(",")[0]
           nickname = fields[2].split(" ")[1..-1].join(" ")
           team = fields[2][1].to_i
-          poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil, "", nil)
+          poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil, nil, nil)
         end
 
       when "move"
@@ -200,7 +200,7 @@ def parse_log(replay_link)
   poke_hash.each_pair do |k,v|
     output += "Team #{team_user[v.team-1]}: #{v.name}#{v.name == v.nickname ? "" : " (#{v.nickname})"} got #{v.kills} KO#{v.kills > 1 ? "s" : ""}\n" if v.kills > 0
   end
-  return output
+  return output[0..1999]
 end
 
 def setup_parse_commands(bot)
@@ -216,8 +216,7 @@ def setup_parse_commands(bot)
         event.edit_response(content: "Oh no! I fell over. Show Mesp this message: #{exception.to_s}")
       else
         event.edit_response(content: output)
-      end
-      
+      end     
     end
   end
 end
