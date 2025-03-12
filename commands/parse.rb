@@ -23,7 +23,7 @@ def parse_log(replay_link)
     event.edit_response(content: "Showdown's servers appear to be down! Or they changed the replay format. Please Arceus let it be the former.")
     return 0
   end
-  stored_damager = nil
+  toxic_debris_source = nil
   future_sight_setter = nil
   last_damager = nil
   weather_setter = nil
@@ -149,9 +149,9 @@ def parse_log(replay_link)
         # handle special activations
         activation = fields[3].split(" ")[1..-1].join(" ")
         if(["Destiny Bond", "Aftermath", "Toxic Debris"].include?(activation))
-          stored_damager = last_damager if activation == "Toxic Debris" && poke_hash[key] != last_damager
+          toxic_debris_source = last_damager if activation == "Toxic Debris" && poke_hash[key] != last_damager
           last_damager = poke_hash[key]
-          cause = activation
+          cause = activation unless activation == "Toxic Debris"
         end
 
       when "-weather"
@@ -166,6 +166,10 @@ def parse_log(replay_link)
         move = fields[3].split(" ")[1..-1].join(" ")
         if(move == "Toxic Spikes")
           tspike_setter[team%2] = last_damager
+          if(!toxic_debris_source.nil?)
+            last_damager = toxic_debris_source
+            toxic_debris_source = nil
+          end
         elsif(fields[3] == "Spikes")
           spike_setter[team%2] = last_damager
         elsif(move == "Stealth Rock")
@@ -174,15 +178,11 @@ def parse_log(replay_link)
 
       when "faint"
         victim = poke_hash[key].name
-        unless(stored_damager.nil?)
-          last_damager = stored_damager
-          stored_damager = nil
-        end            
         if(!(poke_hash[key].retaliation_storage.nil?) && !(stored_cause.empty?)) # Literally only for when you kill a guy but then die to the retaliation of like, rough skin or something
           output += "#{victim} was KO'd by #{poke_hash[key].retaliation_storage.name} via #{stored_cause}\n"
           poke_hash[key].retaliation_storage.kills += 1
           stored_cause = ""
-        else                        
+        else
           output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
           unless(poke_hash[key] == last_damager)
             last_damager.kills += 1

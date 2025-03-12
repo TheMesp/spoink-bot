@@ -1,5 +1,5 @@
 require 'csv'
-STALE_MATCH_CUTOFF = 50
+STALE_MATCH_CUTOFF = 30
 def reset_elo
     @elo_dict = Hash.new(1000)
     @diff_dict = Hash.new(0)
