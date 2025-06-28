@@ -25,8 +25,6 @@ def process_match(player1, player2, constant, outcome)
     @matchage_dict[player2] = @currmatch;
     prob1 = calc_match_probability(@elo_dict[player1], @elo_dict[player2])
     prob2 = calc_match_probability(@elo_dict[player2], @elo_dict[player1])
-    @maxelo_dict[player1] = @elo_dict[player1] if @elo_dict[player1] > @maxelo_dict[player1]
-    @maxelo_dict[player2] = @elo_dict[player2] if @elo_dict[player2] > @maxelo_dict[player2]
     if(outcome == 0)
         # Player 1 wins
         @elo_dict[player1] = @elo_dict[player1] + constant * (1 - prob1)
@@ -54,24 +52,17 @@ def calc_elo_dict(player = nil)
     if player
         print("#{@elo_dict[player]}\n")
     else
-        @elo_dict.delete("kozak")
         sorted = @elo_dict.sort_by {|k, v| -v}        
         print("Active players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
             print("#{symbol}#{key}: #{value.to_i}#{key.length==9?"":"\t"}(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
         end
-        print("-kozak: WASHED\t(WASHED)")
         print("\nInactive players:\n\n")
         sorted.each do |key,value|
             print("#{key}: #{value.to_i}\n") if @matchage_dict[key] + STALE_MATCH_CUTOFF < @currmatch
         end
 
-        # print("\nMatchup stats:\n\n")
-        # matchups = @matchup_dict.sort_by {|k, v| -v}
-        # matchups.each do |key,value|
-        #     print("#{key}: #{value} faceoffs\n") if(key.include?("emily"))
-        # end
         
     end
 end

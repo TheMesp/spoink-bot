@@ -36,7 +36,7 @@ def parse_log(replay_link)
   stored_cause = ""
 
   response.split("\n").each do |line|
-    # puts line
+    #  puts line
     fields = line.split("|")
     if fields.size > 0
       linetype = fields[1]
@@ -59,7 +59,7 @@ def parse_log(replay_link)
           name = fields[3].split(",")[0]
           nickname = fields[2].split(" ")[1..-1].join(" ")
           team = fields[2][1].to_i
-          poke_hash[key] = Pokemon.new(name, nickname, 0, "", team, nil, nil, nil)
+          poke_hash[key] = Pokemon.new(name, nickname, 0, nil, team, nil, nil, nil)
         end
 
       when "move"
@@ -182,6 +182,8 @@ def parse_log(replay_link)
           output += "#{victim} was KO'd by #{poke_hash[key].retaliation_storage.name} via #{stored_cause}\n"
           poke_hash[key].retaliation_storage.kills += 1
           stored_cause = ""
+        elsif last_damager.nil?
+          output += "#{victim} was KO'd via #{cause}, **but I have no idea who dunnit.**\n"
         else
           output += "#{victim} was KO'd by #{poke_hash[key] == last_damager ? "themselves": last_damager.name} via #{cause}\n"
           unless(poke_hash[key] == last_damager)

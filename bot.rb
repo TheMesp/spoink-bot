@@ -20,6 +20,12 @@ bot.send_message(id.to_i, event.message.content.sub(/^[^\s]*\s[^\s]*\s(hide\s)?/
 event.message.delete if hide.eql?("hide")
 end
 
+bot.member_join do |event|
+  if([1199319964448997386, 1022920118767996978].include?(event.user.id))
+    event.server.kick(event.user)
+  end
+end
+
 bot.run(true)
 puts 'bot active'
 bot.join
