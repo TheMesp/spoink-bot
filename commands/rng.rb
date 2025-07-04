@@ -10,10 +10,9 @@ RIGGED_POKEDEX = [203, 563, 867, 981]
 # recursively returns valid evos
 def trace_evo_tree(chain, base_form, passed_base_form)
   # stupid edge cases
-  return ['urshifu-rapid-strike'] if base_form == 'kubfu'
   return ['you decide'] if base_form == 'eevee'
-  return ['lol, lmao'] if chain['species']['name'] == 'cosmog'
-  return ['manaph...haha just kidding sylvee'] if base_form == 'phione'
+  return ['Melmetal, and a free phone'] if base_form == 'meltan'
+  return ['Manaph...haha just kidding sylvee'] if base_form == 'phione'
   output = []
   if passed_base_form && !POKEDEX_BANLIST.include?(chain['species']['name'])
    output += [chain['species']['name'].capitalize]
@@ -85,7 +84,7 @@ def setup_rng_commands(bot)
         
       end
       embed_title = event.options['rig'] ? "Rigged team of #{num}:" : "Team of #{num}:"
-      embed_title = "(TEST) Forced output (NOT VALID)" if event.options['forceid']
+      embed_title = "DEBUG MODE: Forced output" if event.options['forceid']
       response_embed = Discordrb::Webhooks::Embed.new(
         title: embed_title
       )
