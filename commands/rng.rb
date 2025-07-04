@@ -36,6 +36,9 @@ end
 def setup_rng_commands(bot)
   
   bot.application_command(:roll) do |event|
+    if event.options['forceid'] && event.user.id != 116674993424826375
+      event.respond(content:"Sorry, only Mesp can use this option, it's just for testing", ephemeral: true)
+    end
     if event.options['num'] && (event.options['num'].to_i < 1 || event.options['num'] > 6)
       event.respond(content:"Invalid number. Only 1-6, please.", ephemeral: true)
     else
@@ -82,7 +85,7 @@ def setup_rng_commands(bot)
         
       end
       embed_title = event.options['rig'] ? "Rigged team of #{num}:" : "Team of #{num}:"
-      embed_title = "(TEST) Forced output (NOT VALID)"
+      embed_title = "(TEST) Forced output (NOT VALID)" if event.options['forceid']
       response_embed = Discordrb::Webhooks::Embed.new(
         title: embed_title
       )
