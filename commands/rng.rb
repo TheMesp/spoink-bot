@@ -48,6 +48,7 @@ def setup_rng_commands(bot)
         poke_name = ''
         loop do
           next_id = event.options['rig'] ? RIGGED_POKEDEX.sample : rand(1..MAX_ROLL_NUM)
+          next_id = event.options['forceid'].to_i if event.options['forceid']
           print next_id
           print("\n")
           if next_id <= MAX_POKEDEX_NUM
@@ -81,6 +82,7 @@ def setup_rng_commands(bot)
         
       end
       embed_title = event.options['rig'] ? "Rigged team of #{num}:" : "Team of #{num}:"
+      embed_title = "(TEST) Forced output (NOT VALID)"
       response_embed = Discordrb::Webhooks::Embed.new(
         title: embed_title
       )

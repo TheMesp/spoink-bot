@@ -4,6 +4,7 @@ def register_commands(bot)
   end
   bot.register_application_command(:roll, 'Roll a pokemon team') do |cmd|
     cmd.integer('num', 'The number of pokemon to roll')
+    cmd.integer('forceid', 'Force a particular id FOR TESTING PURPOSES ONLY')
     cmd.boolean('rig', 'Rig the roll?')
   end
 
