@@ -154,4 +154,8 @@ def setup_draft_commands(bot)
       event.edit_response(embeds:[response_embed.to_hash])
     end
   end
+
+  bot.application_command(:hammertime) do |event|
+    event.respond(content: "https://www.hammertime.cyou/", ephemeral: event.options['hide'])
+  end
 end

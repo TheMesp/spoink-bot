@@ -8,6 +8,10 @@ def register_commands(bot)
     cmd.boolean('rig', 'Rig the roll?')
   end
 
+  bot.register_application_command(:hammertime, 'Print hammertime link') do |cmd|
+    cmd.boolean('hide', 'Hide the output?')
+  end
+
   bot.register_application_command(:parselog, nil, type: :message) do |cmd|
   end
 
