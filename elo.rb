@@ -1,5 +1,5 @@
 require 'csv'
-STALE_MATCH_CUTOFF = 30
+STALE_MATCH_CUTOFF = 40
 def reset_elo
     @elo_dict = Hash.new(1000)
     @diff_dict = Hash.new(0)
@@ -44,7 +44,7 @@ def process_match(player1, player2, constant, outcome)
 end
 
 def calc_elo_dict(player = nil)
-    Dir.glob("/root/discordbots/spoink-project/spoink-bot/seasons/*.csv").sort.each do |season|
+    Dir.glob("/root/discordbots/spoink-project/spoink-bot/seasons/*rng.csv").sort.each do |season|
         CSV.foreach(season) do |row|
             process_match(row[0], row[1], 40, row[2].to_i)        
         end
@@ -56,7 +56,7 @@ def calc_elo_dict(player = nil)
         print("Active players:\n\n")
         sorted.each do |key,value|
             symbol = @diff_dict[key] < 0 ? '-' : '+';
-            print("#{symbol}#{key}: #{value.to_i}#{key.length==9?"":"\t"}(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
+            print("#{symbol}#{key}: #{value.to_i}#{(key.length==9 && @diff_dict[key]>=1000) ? "" : "\t"}(+#{@diff_dict[key].round(1)})\n".sub("+-","-")) if @matchage_dict[key] + STALE_MATCH_CUTOFF >= @currmatch
         end
         print("\nInactive players:\n\n")
         sorted.each do |key,value|
@@ -67,5 +67,19 @@ def calc_elo_dict(player = nil)
     end
 end
 
+def calc_matchup_stats()
+    Dir.glob("/root/discordbots/spoink-project/spoink-bot/seasons/*.csv").sort.each do |season|
+        CSV.foreach(season) do |row|
+            process_match(row[0], row[1], 40, row[2].to_i)        
+        end
+    end
+
+    sorted = @matchup_dict.sort_by {|k, v| -v}        
+    print("Active players:\n\n")
+    sorted.each do |key,value|
+        print("#{key}: #{value.to_i}\n")
+    end
+end
 reset_elo()
+# calc_matchup_stats()
 calc_elo_dict()
