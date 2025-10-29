@@ -8,6 +8,10 @@ def register_commands(bot)
     cmd.boolean('rig', 'Rig the roll?')
   end
 
+  bot.register_application_command(:mod100, 'See what a 100 slice gets you') do |cmd|
+    cmd.integer('num', 'The number (XX) to use (YXX)', required: true)
+  end
+
   bot.register_application_command(:hammertime, 'Print hammertime link') do |cmd|
     cmd.boolean('hide', 'Hide the output?')
   end
