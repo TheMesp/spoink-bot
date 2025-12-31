@@ -20,6 +20,12 @@ def setup_mod_commands(bot)
           output_ids << next_id
         end
       end
+      if(num <= 25)
+        output_ids << num + 1000
+        response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{num + 1000}`
+          response = JSON.parse(response)
+          output_names << response['name']
+      end
       embed_title = "Team X#{num}:"
       response_embed = Discordrb::Webhooks::Embed.new(
         title: embed_title
