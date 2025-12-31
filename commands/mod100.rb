@@ -26,7 +26,8 @@ def setup_mod_commands(bot)
           response = JSON.parse(response)
           output_names << response['name']
       end
-      embed_title = "Team X#{num}:"
+      extra_format = num < 10 || num == 100 ? "0" : ""
+      embed_title = "Team X#{extra_format}#{num%100}:"
       response_embed = Discordrb::Webhooks::Embed.new(
         title: embed_title
       )
