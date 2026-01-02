@@ -1,5 +1,28 @@
 require_relative "../data/banlist.rb"
 
+# recursively returns valid evos
+def trace_evo_tree(chain, base_form, passed_base_form)
+  # stupid edge cases
+  return ['you decide'] if base_form == 'eevee'
+  output = []
+  if passed_base_form && !POKEDEX_BANLIST.include?(chain['species']['name'])
+   output += [chain['species']['name']]
+  end
+  chain['evolves_to'].each do |evo|
+    output += trace_evo_tree(evo, base_form, passed_base_form || chain['species']['name'] == base_form)
+  end
+  return output
+end
+
+# given a pokeAPI evolution-chain id and pokemon name, determine all valid evolutions
+def get_evos(id, name)
+  response = `curl -s https://pokeapi.co/api/v2/evolution-chain/#{id}`
+  response = JSON.parse(response)
+  output = []
+  output += trace_evo_tree(response['chain'], name, false)
+  return output
+end
+
 def setup_mod_commands(bot)
   
   bot.application_command(:mod100) do |event|
@@ -11,20 +34,19 @@ def setup_mod_commands(bot)
       num = event.options['num'].to_i
       output_names = []
       output_ids = []
-      for i in 0..9 do
+      for i in 0..10 do
         next_id = num + (i * 100)
         if next_id <= MAX_POKEDEX_NUM
           response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
           response = JSON.parse(response)
-          output_names << response['name']
+          poke_name = response['name']
           output_ids << next_id
+          if response['evolution_chain']
+            evos = get_evos(response['evolution_chain']['url'].split('evolution-chain/')[1].to_i, poke_name)
+            poke_name << " (#{evos.join(", ")})" unless evos.empty?
+          end
+          output_names << poke_name
         end
-      end
-      if(num <= 25)
-        output_ids << num + 1000
-        response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{num + 1000}`
-          response = JSON.parse(response)
-          output_names << response['name']
       end
       extra_format = num < 10 || num == 100 ? "0" : ""
       embed_title = "Team X#{extra_format}#{num%100}:"
