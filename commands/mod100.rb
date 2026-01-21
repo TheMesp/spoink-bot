@@ -4,6 +4,7 @@ require_relative "../data/banlist.rb"
 def trace_evo_tree(chain, base_form, passed_base_form)
   # stupid edge cases
   return ['you decide'] if base_form == 'eevee'
+  return ['porygon-z'] if base_form == 'porygon'
   output = []
   if passed_base_form && !POKEDEX_BANLIST.include?(chain['species']['name'])
    output += [chain['species']['name']]
@@ -40,12 +41,19 @@ def setup_mod_commands(bot)
           response = `curl -s https://pokeapi.co/api/v2/pokemon-species/#{next_id}`
           response = JSON.parse(response)
           poke_name = response['name']
+          formatted_poke_name = poke_name
+          if(POKEDEX_BANLIST.include? poke_name)
+            formatted_poke_name = "~~#{poke_name}~~"
+          elsif(TERA_BANLIST.include? poke_name)
+            formatted_poke_name = "*#{poke_name}* (NO TERA)"
+          end
           output_ids << next_id
           if response['evolution_chain']
             evos = get_evos(response['evolution_chain']['url'].split('evolution-chain/')[1].to_i, poke_name)
-            poke_name << " (#{evos.join(", ")})" unless evos.empty?
+            formatted_poke_name << " (#{evos.join(", ")})" unless evos.empty?
           end
-          output_names << poke_name
+          formatted_poke_name << " (Kanto only)" if poke_name == "moltres"
+          output_names << formatted_poke_name
         end
       end
       extra_format = num < 10 || num == 100 ? "0" : ""
