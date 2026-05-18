@@ -8,6 +8,7 @@ require_relative 'commands/rng.rb'
 require_relative 'commands/parse.rb'
 require_relative 'commands/draft.rb'
 require_relative 'commands/mod100.rb'
+require_relative 'commands/squirdle.rb'
 bot = Discordrb::Commands::CommandBot.new token: DISCORD_TOKEN, client_id: DISCORD_CLIENT, prefix: 's/'
 
 register_commands(bot)
@@ -16,6 +17,7 @@ setup_rng_commands(bot)
 setup_parse_commands(bot)
 setup_draft_commands(bot)
 setup_mod_commands(bot)
+setup_squirdle_commands(bot)
 
 bot.command(:mock) do |event, id, hide|
   bot.send_message(id.to_i, event.message.content.sub(/^[^\s]*\s[^\s]*\s(hide\s)?/, ""))

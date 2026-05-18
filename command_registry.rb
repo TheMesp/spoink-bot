@@ -38,4 +38,17 @@ def register_commands(bot)
       sub.string('letter', 'letter to check', required: true)
     end
   end
+
+  bot.register_application_command(:squirdle, 'squirdle-related commands') do |group|
+    group.subcommand(:submit, 'submit your daily squirdle') do |sub|
+      sub.string('result', 'the result emoji matrix, to be copied from the site',  required: true)
+    end
+
+    group.subcommand(:display, 'show your entry for a given day (defaults to current)') do |sub|
+      sub.integer('day', 'the day you want to see your result for')
+    end
+
+    group.subcommand(:stats, 'show your personal squirdle stats') do |sub|
+    end
+  end
 end

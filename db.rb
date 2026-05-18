@@ -5,14 +5,32 @@ require 'sqlite3'
 require 'csv'
 require 'httparty'
 
-# def opendb
-# 	db = SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
-# 	`chmod 666 /root/discordbots/spoink-project/spoink-backend/db/draft_league.db`
-# 	return db
-# end
+def open_web_db
+	db = SQLite3::Database.new "/root/discordbots/spoink-project/spoink-backend/db/draft_league.db"
+	`chmod 666 /root/discordbots/spoink-project/spoink-backend/db/draft_league.db`
+	return db
+end
+
+def open_spoink_db
+	db = SQLite3::Database.new "data/spoink.db"
+	`chmod 666 data/spoink.db`
+	return db
+end
+
+def setup_spoink_db
+	db = open_spoink_db
+	db.execute <<-SQL
+		CREATE TABLE IF NOT EXISTS squirdle (
+			user VARCHAR(30),
+			day SMALLINT,
+			score TINYINT,
+			result VARCHAR(200)
+		);
+	SQL
+end
 
 # queries dummy data into backend
-def setup
+def setupweb
 
 	print "Running Pokemon Draft League Simulator 2022...\n"
 	# db.execute "PRAGMA foreign_keys = OFF;"
@@ -37,4 +55,4 @@ def setup
 
 	print "Done\n"
 end
-setup
+# setup_spoink_db
