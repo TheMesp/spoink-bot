@@ -34,7 +34,7 @@ end
 def format_results(res)
   res = res.sub("\n", " ")
   split_res = res.split(" ")
-  if(split_res.size < 6)
+  if(split_res.size < 6 || split_res[0] != "Squirdle" || split_res[1] != "Daily")
     return {error: "improper format for result", day:0, matrix:[]}
   end
   day = split_res[2]
