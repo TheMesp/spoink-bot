@@ -91,7 +91,7 @@ def setup_squirdle_commands(bot)
     if(count != 0)
       db.execute("SELECT * FROM squirdle WHERE day=? AND user=?", [day, event.user.id]) do |res|
         event.delete_response
-        event.send_message(content: "<@#{res[0]}> shows off: \n```\nDay #{res[1]} - #{res[2] == "10" ? res[2] : "X"}/9:\n#{res[3].split(" ").join("\n")}\n```")
+        event.send_message(content: "<@#{res[0]}> shows off: \n```\nDay #{res[1]} - #{res[2] != "10" ? res[2] : "X"}/9:\n#{res[3].split(" ").join("\n")}\n```")
       end
     else
       event.edit_response(content:"No records found for day #{day}!")
