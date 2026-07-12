@@ -51,4 +51,16 @@ def register_commands(bot)
     group.subcommand(:stats, 'show your personal squirdle stats') do |sub|
     end
   end
+
+  bot.register_application_command(:sheets, 'season sheet links') do |group|
+    group.subcommand(:banlist, 'current banlist') do |sub|
+      sub.boolean('hide', 'Hide the output?')
+    end
+    group.subcommand(:draft, 'draft tracker') do |sub|
+      sub.boolean('hide', 'Hide the output?')
+    end
+    group.subcommand(:schedule, 'season schedule & team sheets') do |sub|
+      sub.boolean('hide', 'Hide the output?')
+    end
+  end
 end
