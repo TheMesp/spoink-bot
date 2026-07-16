@@ -26,6 +26,15 @@ def setup_spoink_db
 			score TINYINT,
 			result VARCHAR(200)
 		);
+
+		CREATE TABLE IF NOT EXISTS signups (
+			userid VARCHAR(30),
+			roleid VARCHAR(30),
+			teamname VARCHAR(255),
+			showdownid VARCHAR(30),
+			timezone VARCHAR(30),
+			tera VARCHAR(255)
+		);
 	SQL
 end
 

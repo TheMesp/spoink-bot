@@ -63,4 +63,14 @@ def register_commands(bot)
       sub.boolean('hide', 'Hide the output?')
     end
   end
+
+  bot.register_application_command(:player, 'season sheet links') do |group|
+    group.subcommand(:signup, 'Sign yourself up') do |sub|
+    end
+    group.subcommand(:show, 'Show signup record') do |sub|
+      sub.user('user', 'user to display', required: true)
+    end
+    group.subcommand(:edit, 'Edit your signup record') do |sub|
+    end
+  end
 end

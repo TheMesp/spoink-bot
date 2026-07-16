@@ -6,6 +6,7 @@ require_relative 'command_registry.rb'
 require_relative 'commands/pokemon.rb'
 require_relative 'commands/rng.rb'
 require_relative 'commands/parse.rb'
+require_relative 'commands/player.rb'
 require_relative 'commands/draft.rb'
 require_relative 'commands/mod100.rb'
 require_relative 'commands/sheets.rb'
@@ -20,6 +21,7 @@ setup_draft_commands(bot)
 setup_mod_commands(bot)
 setup_sheets_commands(bot)
 setup_squirdle_commands(bot)
+setup_player_commands(bot)
 
 bot.command(:mock) do |event, id, hide|
   bot.send_message(id.to_i, event.message.content.sub(/^[^\s]*\s[^\s]*\s(hide\s)?/, ""))
