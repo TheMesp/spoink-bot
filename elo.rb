@@ -18,7 +18,7 @@ def calc_match_probability(winner, loser)
     return 1.0 * 1.0 / (1 + 1.0 * (10 ** (1.0 * (loser - winner) / 400)))
 end
 
-def process_match(player1, player2, constant, outcome)
+def process_match(player1, player2, constant, outcome, playoff)
     add_matchup(player1,player2)
     @currmatch += 1;
     @matchage_dict[player1] = @currmatch;
@@ -28,14 +28,24 @@ def process_match(player1, player2, constant, outcome)
     if(outcome == 0)
         # Player 1 wins
         @elo_dict[player1] = @elo_dict[player1] + constant * (1 - prob1)
-        @elo_dict[player2] = @elo_dict[player2] + constant * (0 - prob2)
         @diff_dict[player1] = constant * (1 - prob1)
-        @diff_dict[player2] = constant * (0 - prob2)
+
+        if(playoff == 0)
+            @elo_dict[player2] = @elo_dict[player2] + constant * (0 - prob2)
+            @diff_dict[player2] = constant * (0 - prob2)
+        else
+            @diff_dict[player2] = 0
+        end
     else
         # Player 2 wins
-        @elo_dict[player1] = @elo_dict[player1] + constant * (0 - prob1)
+        if(playoff == 0)
+            @elo_dict[player1] = @elo_dict[player1] + constant * (0 - prob1)
+            @diff_dict[player1] = constant * (0 - prob1)
+        else
+            @diff_dict[player1] = 0
+        end
+
         @elo_dict[player2] = @elo_dict[player2] + constant * (1 - prob2)
-        @diff_dict[player1] = constant * (0 - prob1)
         @diff_dict[player2] = constant * (1 - prob2)
     end
     @maxelo_dict[player1] = @elo_dict[player1] if @elo_dict[player1] > @maxelo_dict[player1]
@@ -46,7 +56,7 @@ end
 def calc_elo_dict(player = nil)
     Dir.glob("/root/discordbots/spoink-project/spoink-bot/seasons/s*.csv").sort.each do |season|
         CSV.foreach(season) do |row|
-            process_match(row[0], row[1], 40, row[2].to_i)        
+            process_match(row[0], row[1], 40, row[2].to_i, row[3].to_i)        
         end
     end
     if player
@@ -70,7 +80,7 @@ end
 def calc_matchup_stats()
     Dir.glob("/root/discordbots/spoink-project/spoink-bot/seasons/*.csv").sort.each do |season|
         CSV.foreach(season) do |row|
-            process_match(row[0], row[1], 40, row[2].to_i)        
+            process_match(row[0], row[1], 40, row[2].to_i, row[3].to_i)        
         end
     end
 
