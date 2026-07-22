@@ -26,3 +26,5 @@ Team zvero: Heatran (Seatran) got 3 KOs
 Team delicousfalcon: Zapdos (Chris Buscher) got 1 KO
 Team zvero: Walking Wake (Viking Volt) got 2 KOs",
 "https://replay.pokemonshowdown.com/gen9doublescustomgame-2175480309")
+
+expect_equal("a", "https://replay.pokemonshowdown.com/gen9doublescustomgame-2652388221")

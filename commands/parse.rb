@@ -36,7 +36,7 @@ def parse_log(replay_link)
   stored_cause = ""
 
   response.split("\n").each do |line|
-    #  puts line
+    # puts line
     fields = line.split("|")
     if fields.size > 0
       linetype = fields[1]
@@ -107,6 +107,10 @@ def parse_log(replay_link)
             when "confusion"
               last_damager = poke_hash[key]
               cause = "hitting itself"
+            when "move: Infestation"
+              # TODO: SALT CURE AND INFESTATION USE THE SAME PROPERTY
+              last_damager = poke_hash[key].indirect
+              cause = "Infestation chip"
             else
             end
           end             
@@ -152,6 +156,8 @@ def parse_log(replay_link)
           toxic_debris_source = last_damager if activation == "Toxic Debris" && poke_hash[key] != last_damager
           last_damager = poke_hash[key]
           cause = activation unless activation == "Toxic Debris"
+        elsif(["Infestation"].include?(activation))
+          poke_hash[key].indirect = poke_hash[uniformize_key(fields[4].split(" ")[1..-1].join(" "))]
         end
 
       when "-weather"
